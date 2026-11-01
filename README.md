@@ -39,9 +39,9 @@ This project demonstrates how Machine Learning can help in network traffic analy
 
 ## 👨‍💻 Project Team Members
 
-1. **Rence Vithlani**
-2. **Meet Prajapati**
-3. **Zeel Dudhat**
+1. **Rence Vithlani ku2407u705**
+2. **Meet Prajapati ku2407u678**
+3. **Zeel Dudhat ku2407u064**
 
 ## 📂 Project Files
 
