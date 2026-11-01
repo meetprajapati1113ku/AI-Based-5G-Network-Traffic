@@ -1,16 +1,24 @@
 import streamlit as st
 import pandas as pd
-import joblib
 import numpy as np
+import joblib
+from datetime import datetime
 
-# PAGE CONFIG
+# =====================================
+# PAGE CONFIGURATION
+# =====================================
+
 st.set_page_config(
-    page_title="5G Smart Network AI",
+    page_title="NEXUS 5G Intelligence",
     page_icon="📡",
-    layout="wide"
+    layout="wide",
+    initial_sidebar_state="expanded"
 )
 
-# LOAD MODEL
+# =====================================
+# LOAD AI MODEL
+# =====================================
+
 @st.cache_resource
 def load_model():
     return joblib.load("5G_Traffic_Model.pkl")
@@ -18,53 +26,121 @@ def load_model():
 try:
     model = load_model()
 except Exception as e:
-    st.error(f"Model loading error: {e}")
+    st.error(f"AI Model Loading Error: {e}")
     st.stop()
 
+# =====================================
+# SESSION STATE
+# =====================================
+
+if "history" not in st.session_state:
+    st.session_state.history = []
+
+if "result" not in st.session_state:
+    st.session_state.result = None
+
+# =====================================
 # CUSTOM CSS
+# =====================================
+
 st.markdown("""
 <style>
+
 .stApp {
-    background-color: #080e1c;
+    background: linear-gradient(
+        135deg,
+        #07111f,
+        #101d35,
+        #081321
+    );
     color: white;
 }
 
 section[data-testid="stSidebar"] {
-    background-color: #111b30;
+    background: #0c1930;
 }
 
 h1, h2, h3 {
     color: #38bdf8 !important;
 }
 
-.metric-card {
-    background: linear-gradient(135deg,#172b49,#102039);
-    padding: 22px;
-    border-radius: 15px;
-    border: 1px solid #245078;
+.hero {
+    padding: 30px;
+    border-radius: 18px;
+    background: linear-gradient(
+        120deg,
+        #102e52,
+        #123d65,
+        #172554
+    );
+    border: 1px solid #2563eb;
     text-align: center;
-    margin-bottom: 15px;
+    margin-bottom: 25px;
 }
 
-.metric-card h2 {
+.hero h1 {
+    font-size: 42px;
+    color: #ffffff !important;
+}
+
+.hero p {
+    color: #bae6fd;
+    font-size: 17px;
+}
+
+.metric {
+    background: linear-gradient(
+        145deg,
+        #172d4c,
+        #102039
+    );
+    border: 1px solid #245078;
+    padding: 20px;
+    border-radius: 15px;
+    text-align: center;
+    min-height: 115px;
+}
+
+.metric h2 {
     color: #38bdf8;
-    font-size: 28px;
+    font-size: 27px;
 }
 
-.metric-card p {
+.metric p {
     color: #cbd5e1;
 }
 
-.result-card {
-    background: #142b40;
-    padding: 25px;
-    border-radius: 15px;
+.result {
+    background: linear-gradient(
+        120deg,
+        #102c49,
+        #172554
+    );
+    padding: 30px;
+    border-radius: 18px;
     border: 1px solid #38bdf8;
     text-align: center;
 }
 
-.stButton button {
-    background: linear-gradient(90deg,#0284c7,#2563eb);
+.team {
+    background: #142b46;
+    border: 1px solid #2563eb;
+    border-radius: 15px;
+    padding: 20px;
+    text-align: center;
+    margin: 8px;
+}
+
+.team h3 {
+    color: #38bdf8;
+}
+
+div.stButton > button {
+    background: linear-gradient(
+        90deg,
+        #0284c7,
+        #2563eb
+    );
     color: white;
     border-radius: 10px;
     height: 50px;
@@ -72,110 +148,187 @@ h1, h2, h3 {
     border: none;
 }
 
+div.stButton > button:hover {
+    background: #0ea5e9;
+    color: white;
+}
+
 </style>
 """, unsafe_allow_html=True)
 
-# HEADER
-st.title("📡 5G SMART NETWORK")
-st.subheader("AI-Based Network Traffic Prediction System")
-
-st.markdown(
-    "Intelligent network traffic prediction using "
-    "Machine Learning and Random Forest Classifier."
-)
-
-st.divider()
-
+# =====================================
 # SIDEBAR
-st.sidebar.title("🌐 NETWORK CONTROL")
+# =====================================
 
-st.sidebar.success("AI Model: Loaded")
-st.sidebar.info("Algorithm: Random Forest")
-st.sidebar.info("Language: Python")
-st.sidebar.info("Framework: Streamlit")
+st.sidebar.title("📡 NEXUS 5G")
+
+st.sidebar.success("AI MODEL: ONLINE")
 
 st.sidebar.markdown("---")
-st.sidebar.write("Prediction Classes")
-st.sidebar.write("🟢 LOW")
-st.sidebar.write("🟡 MEDIUM")
-st.sidebar.write("🔴 HIGH")
 
-# INPUT SECTION
-st.header("⚙️ Network Parameters")
+st.sidebar.subheader("SYSTEM INFORMATION")
 
-col1, col2 = st.columns(2)
+st.sidebar.write("🤖 Algorithm: Random Forest")
+st.sidebar.write("🐍 Language: Python")
+st.sidebar.write("⚡ Framework: Streamlit")
+st.sidebar.write("🧠 AI Status: Loaded")
 
-with col1:
+st.sidebar.markdown("---")
+
+st.sidebar.subheader("TRAFFIC CATEGORIES")
+
+st.sidebar.write("🟢 LOW TRAFFIC")
+st.sidebar.write("🟡 MEDIUM TRAFFIC")
+st.sidebar.write("🔴 HIGH TRAFFIC")
+
+st.sidebar.markdown("---")
+
+st.sidebar.caption(
+    "NEXUS 5G Intelligence | Academic Project"
+)
+
+# =====================================
+# HERO SECTION
+# =====================================
+
+st.markdown("""
+<div class="hero">
+
+<h1>🚀 NEXUS 5G INTELLIGENCE</h1>
+
+<p>
+AI-POWERED NETWORK COMMAND CENTER
+</p>
+
+<p>
+Next Generation 5G Network Traffic Prediction
+</p>
+
+</div>
+""", unsafe_allow_html=True)
+
+st.success("SYSTEM STATUS: AI MODEL LOADED SUCCESSFULLY")
+
+# =====================================
+# PROJECT INFORMATION
+# =====================================
+
+with st.expander("📘 About Our Project"):
+
+    st.write("""
+    NEXUS 5G is an AI-based network traffic
+    prediction system.
+
+    It uses Machine Learning to classify
+    network traffic into Low, Medium and High.
+
+    Algorithm: Random Forest Classifier
+
+    Programming Language: Python
+
+    Framework: Streamlit
+
+    Dataset: 5G Network Traffic Dataset
+    """)
+
+# =====================================
+# NETWORK INPUTS
+# =====================================
+
+st.header("⚙️ NETWORK CONTROL CENTER")
+
+st.write(
+    "Enter network parameters to generate "
+    "an AI-based traffic prediction."
+)
+
+c1, c2 = st.columns(2)
+
+with c1:
 
     users = st.number_input(
         "👥 Connected Users",
-        10, 1999, 1500, 10
+        min_value=10,
+        max_value=1999,
+        value=1500,
+        step=10
     )
 
     bandwidth = st.number_input(
         "📶 Bandwidth (Mbps)",
-        50, 999, 200, 10
+        min_value=50,
+        max_value=999,
+        value=200,
+        step=10
     )
 
     signal = st.number_input(
         "📡 Signal Strength",
-        1, 100, 80, 1
+        min_value=1,
+        max_value=100,
+        value=80
     )
 
-with col2:
+with c2:
 
     packets = st.number_input(
         "📊 Packet Rate",
-        100, 9999, 8500, 100
+        min_value=100,
+        max_value=9999,
+        value=8500,
+        step=100
     )
 
     hour = st.slider(
         "🕒 Network Hour",
-        0, 23, 20
+        0,
+        23,
+        20
     )
+
+# =====================================
+# STATISTICS CARDS
+# =====================================
 
 st.divider()
 
-# LIVE STATISTICS
-st.header("📈 Network Statistics")
+st.header("📊 NETWORK STATISTICS")
 
-m1, m2, m3, m4 = st.columns(4)
+a, b, c, d, e, f = st.columns(6)
 
-with m1:
-    st.markdown(
-        f'<div class="metric-card"><p>Connected Users</p>'
-        f'<h2>{users}</h2></div>',
-        unsafe_allow_html=True
-    )
+cards = [
+    (a, "👥 USERS", users),
+    (b, "📶 BANDWIDTH", f"{bandwidth} Mbps"),
+    (c, "📡 SIGNAL", f"{signal}%"),
+    (d, "📦 PACKETS", packets),
+    (e, "🕒 HOUR", f"{hour}:00"),
+    (f, "🤖 MODEL", "ACTIVE")
+]
 
-with m2:
-    st.markdown(
-        f'<div class="metric-card"><p>Bandwidth</p>'
-        f'<h2>{bandwidth}</h2><p>Mbps</p></div>',
-        unsafe_allow_html=True
-    )
+for column, title, value in cards:
 
-with m3:
-    st.markdown(
-        f'<div class="metric-card"><p>Signal Strength</p>'
-        f'<h2>{signal}%</h2></div>',
-        unsafe_allow_html=True
-    )
+    with column:
 
-with m4:
-    st.markdown(
-        f'<div class="metric-card"><p>Packet Rate</p>'
-        f'<h2>{packets}</h2></div>',
-        unsafe_allow_html=True
-    )
+        st.markdown(
+            f"""
+            <div class="metric">
+                <p>{title}</p>
+                <h2>{value}</h2>
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
+
+# =====================================
+# AI PREDICTION
+# =====================================
 
 st.divider()
 
-# PREDICTION
-st.header("🤖 AI Traffic Prediction")
+st.header("🧠 AI PREDICTION ENGINE")
 
 if st.button(
-    "🚀 PREDICT NETWORK TRAFFIC",
+    "🚀 GENERATE AI TRAFFIC PREDICTION",
     use_container_width=True
 ):
 
@@ -187,189 +340,420 @@ if st.button(
         "hour": hour
     }])
 
-    prediction = str(model.predict(input_data)[0])
+    try:
 
-    st.session_state["prediction"] = prediction
-    st.session_state["input_data"] = input_data
+        prediction = str(model.predict(input_data)[0])
 
-    if hasattr(model, "predict_proba"):
+        probabilities = None
 
-        probabilities = model.predict_proba(input_data)[0]
+        if hasattr(model, "predict_proba"):
 
-        st.session_state["probabilities"] = probabilities
+            probabilities = model.predict_proba(
+                input_data
+            )[0]
 
-        st.session_state["classes"] = model.classes_
+        st.session_state.result = {
+            "prediction": prediction,
+            "probabilities": probabilities,
+            "input": input_data.copy(),
+            "time": datetime.now().strftime(
+                "%d-%m-%Y %H:%M:%S"
+            )
+        }
 
-# SHOW RESULT
-if "prediction" in st.session_state:
+        st.session_state.history.append({
+            "Time": datetime.now().strftime(
+                "%d-%m-%Y %H:%M:%S"
+            ),
+            "Users": users,
+            "Bandwidth": bandwidth,
+            "Signal": signal,
+            "Packets": packets,
+            "Prediction": prediction
+        })
 
-    prediction = st.session_state["prediction"]
+    except Exception as error:
 
-    st.subheader("🎯 Prediction Result")
+        st.error(f"Prediction Error: {error}")
+
+# =====================================
+# DISPLAY RESULT
+# =====================================
+
+result = st.session_state.result
+
+if result:
+
+    prediction = result["prediction"]
+
+    st.divider()
+
+    st.header("🎯 AI PREDICTION RESULT")
 
     if prediction.lower() == "low":
 
-        st.success("🟢 LOW NETWORK TRAFFIC")
-
+        icon = "🟢"
         recommendation = (
-            "Network traffic is predicted to be low. "
+            "Low network traffic predicted. "
             "Normal network operation can continue."
         )
 
     elif prediction.lower() == "medium":
 
-        st.warning("🟡 MEDIUM NETWORK TRAFFIC")
-
+        icon = "🟡"
         recommendation = (
-            "Moderate network traffic is predicted. "
+            "Moderate traffic predicted. "
             "Monitor bandwidth and network performance."
         )
 
     else:
 
-        st.error("🔴 HIGH NETWORK TRAFFIC")
-
+        icon = "🔴"
         recommendation = (
-            "High network traffic is predicted. "
+            "High network traffic predicted. "
             "Consider load balancing and resource allocation."
         )
 
     st.markdown(
-        f'<div class="result-card">'
-        f'<h2>AI Prediction: {prediction.upper()}</h2>'
-        f'<p>Random Forest Classifier Result</p>'
-        f'</div>',
+        f"""
+        <div class="result">
+            <h1>{icon} {prediction.upper()} TRAFFIC</h1>
+            <p>AI Random Forest Classification Result</p>
+        </div>
+        """,
         unsafe_allow_html=True
     )
 
-    st.divider()
+    # =================================
+    # PROBABILITY
+    # =================================
 
-    # PROBABILITY GRAPH
-    if "probabilities" in st.session_state:
+    if result["probabilities"] is not None:
 
-        st.header("📊 AI Prediction Probability")
+        st.subheader("📈 Prediction Confidence")
 
         probability_df = pd.DataFrame({
-            "Traffic Category": st.session_state["classes"],
-            "Probability (%)":
-                np.round(
-                    st.session_state["probabilities"] * 100,
-                    2
-                )
-        }).set_index("Traffic Category")
+            "Traffic Category": model.classes_,
+            "Probability (%)": np.round(
+                result["probabilities"] * 100,
+                2
+            )
+        })
 
-        st.bar_chart(probability_df)
+        st.bar_chart(
+            probability_df.set_index("Traffic Category")
+        )
 
         st.dataframe(
             probability_df,
-            use_container_width=True
+            use_container_width=True,
+            hide_index=True
         )
 
-    # TRAFFIC ANALYSIS
-    st.header("📈 Traffic Analysis")
+    # =================================
+    # WHAT IF ANALYSIS
+    # =================================
 
-    if prediction.lower() == "low":
-        st.info("Network load category: LOW")
+    st.divider()
 
-    elif prediction.lower() == "medium":
-        st.info("Network load category: MEDIUM")
+    st.header("🔍 WHAT-IF ANALYSIS")
 
-    else:
-        st.info("Network load category: HIGH")
+    st.write(
+        "Observe how prediction probabilities change "
+        "when connected users increase."
+    )
 
-    # WHAT-IF GRAPH
-    st.subheader("🔍 Connected Users Sensitivity Analysis")
+    if hasattr(model, "predict_proba"):
 
-    user_values = sorted(set([
-        max(10, users - 400),
-        max(10, users - 200),
-        users,
-        min(1999, users + 200),
-        min(1999, users + 400)
-    ]))
+        scenario_users = sorted(set([
+            max(10, users - 400),
+            max(10, users - 200),
+            users,
+            min(1999, users + 200),
+            min(1999, users + 400)
+        ]))
 
-    scenario_rows = []
+        scenario_data = []
 
-    for user_count in user_values:
+        for count in scenario_users:
 
-        scenario = st.session_state["input_data"].copy()
+            scenario = result["input"].copy()
 
-        scenario["connected_users"] = user_count
-
-        if hasattr(model, "predict_proba"):
+            scenario["connected_users"] = count
 
             probs = model.predict_proba(scenario)[0]
 
-            for cls, prob in zip(model.classes_, probs):
+            for category, probability in zip(
+                model.classes_,
+                probs
+            ):
 
-                scenario_rows.append({
-                    "Connected Users": user_count,
-                    "Traffic Category": str(cls),
-                    "Probability (%)": round(prob * 100, 2)
+                scenario_data.append({
+                    "Connected Users": count,
+                    "Category": str(category),
+                    "Probability (%)": probability * 100
                 })
 
-    if scenario_rows:
+        scenario_df = pd.DataFrame(scenario_data)
 
-        scenario_df = pd.DataFrame(scenario_rows)
-
-        chart_df = scenario_df.pivot(
+        chart = scenario_df.pivot(
             index="Connected Users",
-            columns="Traffic Category",
+            columns="Category",
             values="Probability (%)"
         )
 
-        st.line_chart(chart_df)
+        st.line_chart(chart)
 
         st.caption(
-            "What-if analysis: model probabilities when "
-            "connected-user count changes while other inputs "
-            "remain constant."
+            "Illustrative what-if scenarios generated "
+            "using the trained model."
         )
 
+    # =================================
+    # TRAFFIC ANALYSIS
+    # =================================
+
+    st.divider()
+
+    st.header("📊 TRAFFIC ANALYSIS")
+
+    x, y = st.columns(2)
+
+    with x:
+
+        st.metric(
+            "Predicted Traffic",
+            prediction.upper()
+        )
+
+    with y:
+
+        if result["probabilities"] is not None:
+
+            confidence = max(
+                result["probabilities"]
+            ) * 100
+
+            st.metric(
+                "Top Class Probability",
+                f"{confidence:.2f}%"
+            )
+
+        else:
+
+            st.metric(
+                "Top Class Probability",
+                "Not available"
+            )
+
+    # =================================
     # RECOMMENDATIONS
-    st.header("💡 AI Network Recommendations")
+    # =================================
+
+    st.divider()
+
+    st.header("💡 AI NETWORK RECOMMENDATIONS")
 
     st.info(recommendation)
 
     if signal < 40:
 
         st.warning(
-            "Weak signal input: investigate signal coverage "
-            "and interference."
+            "Weak signal input: Review signal coverage "
+            "and possible interference."
         )
 
     if bandwidth < 150:
 
         st.warning(
-            "Lower bandwidth input: review available bandwidth."
+            "Bandwidth input is relatively low. "
+            "Review available network capacity."
         )
 
     if packets > 8000:
 
         st.warning(
-            "High packet-rate input: monitor packet processing."
+            "High packet rate input. "
+            "Monitor packet processing performance."
         )
 
-    st.success("AI prediction completed successfully!")
+    st.success("AI ANALYSIS COMPLETED")
+
+# =====================================
+# PREDICTION HISTORY
+# =====================================
 
 st.divider()
 
-# FOOTER
+st.header("📜 PREDICTION HISTORY")
+
+if st.session_state.history:
+
+    history_df = pd.DataFrame(
+        st.session_state.history
+    )
+
+    st.dataframe(
+        history_df,
+        use_container_width=True,
+        hide_index=True
+    )
+
+    csv = history_df.to_csv(
+        index=False
+    ).encode("utf-8")
+
+    st.download_button(
+        "⬇️ DOWNLOAD PREDICTION REPORT",
+        data=csv,
+        file_name="NEXUS_5G_Prediction_Report.csv",
+        mime="text/csv"
+    )
+
+    if st.button("🗑️ CLEAR HISTORY"):
+
+        st.session_state.history = []
+
+        st.rerun()
+
+else:
+
+    st.info(
+        "No predictions yet. Generate your first prediction."
+    )
+
+# =====================================
+# DATASET EXPLORER
+# =====================================
+
+st.divider()
+
+st.header("🗂️ DATASET EXPLORER")
+
+try:
+
+    dataset = pd.read_csv(
+        "5G_Network_Traffic_Dataset.csv"
+    )
+
+    st.write("Dataset Preview")
+
+    st.dataframe(
+        dataset.head(20),
+        use_container_width=True
+    )
+
+    st.metric(
+        "Total Dataset Records",
+        len(dataset)
+    )
+
+    st.metric(
+        "Total Dataset Columns",
+        len(dataset.columns)
+    )
+
+    st.download_button(
+        "⬇️ DOWNLOAD DATASET",
+        dataset.to_csv(index=False).encode("utf-8"),
+        file_name="5G_Network_Dataset.csv",
+        mime="text/csv"
+    )
+
+except Exception:
+
+    st.warning(
+        "Dataset file is not available."
+    )
+
+# =====================================
+# TEAM SECTION
+# =====================================
+
+st.divider()
+
+st.header("👨‍💻 MEET OUR DEVELOPMENT TEAM")
+
 st.markdown("""
-<center>
+<p style="color:#bae6fd;font-size:17px;">
+Designed and developed as a Computer Networks Mini Project.
+</p>
+""", unsafe_allow_html=True)
 
-### 📡 5G SMART NETWORK
+t1, t2, t3 = st.columns(3)
 
-AI-Based 5G Network Traffic Prediction
+team = [
+    (t1, "01", "MIT PRAJAPATI"),
+    (t2, "02", "RENCE VITHLANI"),
+    (t3, "03", "ZEEL DUDHAT")
+]
 
-Developed using Python | Machine Learning | Streamlit
+for col, number, name in team:
 
-**Team Project**
+    with col:
 
-</center>
+        st.markdown(
+            f"""
+            <div class="team">
+                <h2>👨‍💻</h2>
+                <h3>{name}</h3>
+                <p>TEAM MEMBER {number}</p>
+                <p>NEXUS 5G PROJECT</p>
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
+
+# =====================================
+# PROJECT DETAILS
+# =====================================
+
+st.divider()
+
+with st.expander("🎓 PROJECT TECHNOLOGY"):
+
+    st.write("""
+    Project: AI-Based 5G Network Traffic Prediction
+
+    Algorithm: Random Forest Classifier
+
+    Programming Language: Python
+
+    Libraries: Pandas, NumPy, Scikit-learn
+
+    Web Framework: Streamlit
+
+    Model Type: Machine Learning Classification
+
+    Prediction Classes: Low, Medium, High
+    """)
+
+# =====================================
+# FOOTER
+# =====================================
+
+st.markdown("""
+<div class="hero">
+
+<h2>🚀 NEXUS 5G INTELLIGENCE</h2>
+
+<p>
+AI-POWERED NETWORK TRAFFIC PREDICTION
+</p>
+
+<p>
+Developed by Mit Prajapati | Rence Vithlani |
+Zeel Dudhat
+</p>
+
+<p>
+Computer Networks Mini Project
+</p>
+
+</div>
 """, unsafe_allow_html=True)
 
 st.caption(
-    "Educational prototype using a model trained on synthetic data. "
-    "Predictions are not live telecom network measurements."
+    "Academic demonstration using a synthetic-data-trained model. "
+    "This dashboard does not connect to a live 5G telecom network."
 )
